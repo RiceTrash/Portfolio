@@ -64,7 +64,7 @@
 [data-theme="light"] {
   --bg-primary: #ffffff;
   --bg-secondary: #f5f5f5;
-  --bg-tertiary: #e5e5e5;
+  --bg-tertiary: #ffffff;
   --bg-card: #ffffff;
   --bg-card-hover: #f9f9f9;
 
@@ -122,7 +122,7 @@
 [data-theme="light"] {
     --bg-primary: #ffffff;
     --bg-secondary: #f5f5f5;
-    --bg-tertiary: #e5e5e5;
+    --bg-tertiary: #ffffff;
     --bg-card: #ffffff;
     --bg-card-hover: #f9f9f9;
   
@@ -567,10 +567,33 @@ body {
     margin: 0 auto 1.5rem;
   }
   
+  [data-theme="light"] .highlight-icon {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
+  }
+  
   .highlight-icon .icon {
     width: 24px;
     height: 24px;
     color: var(--text-primary);
+  }
+  
+  /* Make icon colors suitable for light theme */
+  [data-theme="light"] .highlight-icon .icon,
+  [data-theme="light"] .project-icon .icon,
+  [data-theme="light"] .skill-header .icon,
+  [data-theme="light"] .contact-icon .icon {
+    color: rgba(0, 0, 0, 0.7);
+  }
+  
+  /* Hover states for icons in light theme */
+  [data-theme="light"] .highlight-card:hover .highlight-icon,
+  [data-theme="light"] .project-card:hover .project-icon,
+  [data-theme="light"] .skill-category:hover .skill-header .icon,
+  [data-theme="light"] .contact-item:hover .contact-icon {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
   }
   
   .highlight-card h3 {
@@ -640,6 +663,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  
+  [data-theme="light"] .project-icon {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
   }
   
   .project-icon .icon {
@@ -803,6 +832,12 @@ body {
     height: 40px;
   }
   
+  [data-theme="light"] .skill-header .icon {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
+  }
+  
   .skill-header h3 {
     font-size: 1.2rem;
     font-weight: 600;
@@ -889,6 +924,12 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+  }
+  
+  [data-theme="light"] .contact-icon {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
   }
   
   .contact-icon .icon {
