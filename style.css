@@ -748,7 +748,7 @@ body {
   
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
     gap: 2rem;
   }
   
@@ -982,6 +982,59 @@ body {
     transform: scale(0.5);
 }
 
+/* Technology icon styling - updated to match the standard skill tags layout */
+.tech-icons-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.tech-icon-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-tertiary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border-primary);
+  transition: all 0.3s ease;
+}
+
+.tech-icon-container:hover {
+  transform: translateY(-2px);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.tech-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  filter: brightness(1);
+}
+
+.tech-icon-container:hover .tech-icon {
+  filter: brightness(1.2);
+}
+
+/* Adjustment for skill tags when used with icons */
+.tech-icon-container .skill-tag {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.tech-icon-container:hover .skill-tag {
+  color: var(--text-primary);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-menu {
@@ -1117,3 +1170,34 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-secondary);
   }
+
+  /* Skills Section - Adjusted grid layout */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.skill-category {
+  /* ...existing code... */
+}
+
+/* Make specific categories side-by-side */
+.skill-category.half-width {
+  grid-column: span 1;
+}
+
+/* Create a wrapper for the half-width categories */
+.half-width-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  grid-column: span 1;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .half-width-container {
+    grid-template-columns: 1fr;
+  }
+}
