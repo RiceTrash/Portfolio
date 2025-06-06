@@ -1,6 +1,6 @@
 // Simple theme toggle implementation
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Debug script loaded');
+  console.log('Debug script loaded - with soft black theme');
   
   // Find the theme toggle button
   const themeToggle = document.getElementById('theme-toggle');
@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentTheme === 'light') {
       html.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
-      console.log('Switched to dark theme');
+      console.log('Switched to soft black dark theme');
     } else {
       html.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
-      console.log('Switched to light theme');
+      console.log('Switched to light theme with 60-30-10 color rule');
     }
     
     // Force a reflow for immediate CSS variable updates
@@ -48,13 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Then set the appropriate theme
     if (savedTheme === 'light') {
       document.documentElement.setAttribute('data-theme', 'light');
+      console.log('Set light theme (60-30-10 color rule)');
     } else if (savedTheme === 'dark' || prefersDark) {
       document.documentElement.setAttribute('data-theme', 'dark');
+      console.log('Set soft black dark theme');
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
+      console.log('Default to light theme (60-30-10 color rule)');
     }
-    
-    console.log('Initial theme set to:', document.documentElement.getAttribute('data-theme'));
   }
   
   // Initialize theme
