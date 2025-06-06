@@ -126,9 +126,9 @@ buttons.forEach((button) => {
   })
 })
 
-// Enhanced ripple effect CSS
-const style = document.createElement("style")
-style.textContent = `
+// Add enhanced ripple effect CSS
+const styleElement = document.createElement("style")
+styleElement.textContent = `
     .btn {
         position: relative;
         overflow: hidden;
@@ -164,8 +164,17 @@ style.textContent = `
         transform: translateY(0);
         transition: transform 0.1s ease-out;
     }
+    
+    /* Theme transition styles */
+    body.theme-transition * {
+        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
+    }
+    
+    .theme-toggle {
+        overflow: hidden;
+    }
 `
-document.head.appendChild(style)
+document.head.appendChild(styleElement)
 
 // Parallax effect for hero section
 window.addEventListener("scroll", () => {
@@ -231,3 +240,6 @@ const titleObserver = new IntersectionObserver(
 )
 
 sectionTitles.forEach((title) => titleObserver.observe(title))
+
+// Remove the existing theme switcher code to avoid conflicts with debug.js
+// Theme functionality is now handled by debug.js
