@@ -1,24 +1,25 @@
 /* Dark and Light Theme Color Palettes */
 :root {
-    /* Dark Theme (Default) */
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #111111;
-    --bg-tertiary: #1a1a1a;
-    --bg-card: #161616;
-    --bg-card-hover: #1f1f1f;
+    /* Dark Theme (Default) - Using soft blacks instead of pure black */
+    --bg-primary: #121212;    /* Was #0a0a0a */
+    --bg-secondary: #1e1e1e;  /* Was #111111 */
+    --bg-tertiary: #252525;   /* Was #1a1a1a */
+    --bg-card: #1a1a1a;       /* Was #161616 */
+    --bg-card-hover: #2a2a2a; /* Was #1f1f1f */
   
-    --text-primary: #ffffff;
-    --text-secondary: #e5e5e5;
-    --text-muted: #a3a3a3;
-    --text-accent: #737373;
+    --text-primary: #f8f9fa;  /* Was #ffffff */
+    --text-secondary: #e9ecef;/* Was #e5e5e5 */
+    --text-muted: #adb5bd;    /* Was #a3a3a3 */
+    --text-accent: #868e96;   /* Was #737373 */
   
+    /* Keep accent colors the same */
     --accent-primary: #3b82f6;
     --accent-secondary: #1d4ed8;
     --accent-tertiary: #60a5fa;
   
-    --border-primary: #262626;
-    --border-secondary: #404040;
-    --border-accent: #525252;
+    --border-primary: #2c2c2c; /* Was #262626 */
+    --border-secondary: #444444; /* Was #404040 */
+    --border-accent: #555555;    /* Was #525252 */
   
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
@@ -29,31 +30,34 @@
     --transition-speed: 0.3s;
 }
 
-/* Light Theme Colors */
+/* Light Theme Colors - 60-30-10 color rule */
 [data-theme="light"] {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f5f5f5;
-    --bg-tertiary: #e5e5e5;
+    /* 60% - Primary Colors (Main backgrounds) */
+    --bg-primary: #f8fafc;
     --bg-card: #ffffff;
-    --bg-card-hover: #f9f9f9;
+    --bg-card-hover: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #334155;
+    
+    /* 30% - Secondary Colors (Supporting elements) */
+    --bg-secondary: #e2e8f0;
+    --bg-tertiary: #cbd5e1;
+    --text-muted: #64748b;
+    --text-accent: #475569;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    
+    /* 10% - Accent Colors (Highlights, CTAs) */
+    --accent-primary: #3b82f6;
+    --accent-secondary: #1d4ed8;
+    --accent-tertiary: #60a5fa;
+    --border-accent: #94a3b8;
   
-    --text-primary: #111111;
-    --text-secondary: #333333;
-    --text-muted: #555555;
-    --text-accent: #777777;
-  
-    --accent-primary: #1d4ed8;
-    --accent-secondary: #3b82f6;
-    --accent-tertiary: #2563eb;
-  
-    --border-primary: #e5e5e5;
-    --border-secondary: #d4d4d4;
-    --border-accent: #a3a3a3;
-  
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    /* Shadows with reduced intensity for light theme */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
 }
 
 /* Debug styles to make the theme change more obvious */
@@ -217,7 +221,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(10, 10, 10, 0.95);
+    background: rgba(18, 18, 18, 0.95); /* Was rgba(10, 10, 10, 0.95) */
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-primary);
     z-index: 1000;
@@ -230,13 +234,14 @@ body {
   }
   
   .navbar.scrolled {
-    background: rgba(10, 10, 10, 0.98);
+    background: rgba(18, 18, 18, 0.98); /* Was rgba(10, 10, 10, 0.98) */
     box-shadow: var(--shadow-lg);
     border-bottom-color: var(--border-secondary);
   }
   
   [data-theme="light"] .navbar.scrolled {
     background: rgba(255, 255, 255, 0.98);
+    border-bottom-color: var(--border-secondary);
   }
   
   .nav-container {
@@ -425,6 +430,11 @@ body {
     box-shadow: var(--shadow-md);
   }
   
+  [data-theme="light"] .btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+  }
+  
   .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
@@ -435,6 +445,11 @@ body {
     background: transparent;
     color: var(--accent-tertiary);
     border: 2px solid var(--accent-primary);
+  }
+  
+  [data-theme="light"] .btn-secondary {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
   }
   
   .btn-secondary:hover {
