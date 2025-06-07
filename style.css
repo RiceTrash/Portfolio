@@ -783,6 +783,32 @@ body {
     border: 1px solid var(--border-primary);
     transition: all 0.3s ease;
   }
+
+  .project-links {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .project-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
+  }
+  
+  .project-link:hover {
+    background: var(--bg-secondary);
+    transform: translateY(-2px);
+  }
   
   .tech-tag:hover {
     background: var(--accent-primary);
