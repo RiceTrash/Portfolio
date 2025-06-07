@@ -243,3 +243,210 @@ sectionTitles.forEach((title) => titleObserver.observe(title))
 
 // Remove the existing theme switcher code to avoid conflicts with debug.js
 // Theme functionality is now handled by debug.js
+
+// --------- Navigation highlight on scroll ---------
+// Utility function to limit how often a function runs during frequent events
+function debounce(func, wait = 20, immediate = false) {
+  let timeout;
+  return function() {
+    const context = this, args = arguments;
+    const later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
+// Get all sections that should be tracked in navigation
+const navSections = document.querySelectorAll('section[id]');
+
+// Create a map of section IDs to their respective navigation links for quicker lookup
+const sectionToNavMap = {};
+navLinks.forEach(link => {
+  const sectionId = link.getAttribute('href').substring(1); // Remove # from href
+  if (sectionId) {
+    sectionToNavMap[sectionId] = link;
+  }
+});
+
+// Create Intersection Observer for navigation highlighting
+const navObserver = new IntersectionObserver((entries, observer) => {
+  // Update our internal state of which sections are currently visible
+  entries.forEach(entry => {
+    const targetSection = entry.target;
+    // Mark the section with its visibility status
+    if (entry.isIntersecting) {
+      targetSection.dataset.visible = "true";
+    } else {
+      targetSection.dataset.visible = "false";
+    }
+  });
+
+  // Get all sections that have links in the navigation
+  const allNavSections = Array.from(
+    document.querySelectorAll('section[id]')
+  ).filter(section => 
+    sectionToNavMap[section.id]
+  );
+  
+  // Get all visible sections based on our dataset
+  const visibleSections = allNavSections.filter(
+    section => section.dataset.visible === "true"
+  );
+
+  // Only update navigation if we have visible sections
+  if (visibleSections.length > 0) {
+    // Calculate which section takes up most of the viewport
+    const bestSection = visibleSections.reduce((best, current) => {
+      const currentRect = current.getBoundingClientRect();
+      const bestRect = best.getBoundingClientRect();
+      
+      // Calculate how much of each section is in the viewport
+      const currentVisible = Math.min(currentRect.bottom, window.innerHeight) - 
+                            Math.max(currentRect.top, 0);
+      const bestVisible = Math.min(bestRect.bottom, window.innerHeight) - 
+                         Math.max(bestRect.top, 0);
+      
+      // Adjust for section position - prefer sections closer to the top
+      // This creates better UX as users typically read from top to bottom
+      const viewportThird = window.innerHeight / 3;
+      
+      let currentScore = currentVisible;
+      let bestScore = bestVisible;
+      
+      // Bonus for sections in the first third of the screen
+      if (currentRect.top < viewportThird) {
+        currentScore *= 1.5;
+      }
+      
+      if (bestRect.top < viewportThird) {
+        bestScore *= 1.5;
+      }
+      
+      return currentScore > bestScore ? current : best;
+    });
+    
+    const id = bestSection.id;
+    
+    // Only update the active link if needed
+    const currentActive = document.querySelector('.nav-link.active');
+    const newActive = sectionToNavMap[id];
+    
+    if (!currentActive || currentActive !== newActive) {
+      // Remove active class from all navigation links
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Add active class to the corresponding link
+      if (newActive) {
+        newActive.classList.add('active');
+      }
+    }
+  }
+}, {
+  // Check more threshold points for better accuracy
+  threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+  // Focus on the top 70% of the viewport for better user experience
+  rootMargin: "-10% 0px -70% 0px"
+});
+
+// Observe all sections that have corresponding navigation links
+navSections.forEach(section => {
+  const sectionId = section.getAttribute('id');
+  
+  // Initialize dataset for tracking visibility
+  section.dataset.visible = "false";
+  
+  // Only observe sections that have navigation links
+  if (sectionToNavMap[sectionId]) {
+    // Mark that this section is being observed
+    section.dataset.observed = "true";
+    navObserver.observe(section);
+  }
+});
+
+// Handle hero section and top of page scrolling
+function activateDefaultLink() {
+  const scrollPosition = window.scrollY;
+  
+  // Only trigger when at the very top of page
+  if (scrollPosition < 20) {
+    // At the top of page, we want to highlight the first link in the nav
+    // This is typically "Projects" based on your menu structure
+    
+    // Remove active class from all links first
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+    });
+    
+    // Activate the first link (Projects section)
+    if (navLinks.length > 0) {
+      navLinks[0].classList.add('active');
+    }
+  }
+  
+  // At the bottom of page, ensure the last section is highlighted
+  const bottomThreshold = document.body.scrollHeight - window.innerHeight - 20;
+  if (scrollPosition > bottomThreshold) {
+    // We're at the bottom of the page, highlight the last nav link (Contact)
+    const lastNavLink = navLinks[navLinks.length - 1];
+    
+    // Only update if needed
+    if (!lastNavLink.classList.contains('active')) {
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+      });
+      lastNavLink.classList.add('active');
+    }
+  }
+}
+
+// Initialize navigation highlighting on page load
+function initNavHighlighting() {
+  // Set initial active link based on scroll position
+  activateDefaultLink();
+  
+  // Add smooth scroll class to body for smoother animations
+  document.body.classList.add('smooth-scroll');
+  
+  // Listen for scroll events to handle edge cases
+  window.addEventListener('scroll', debounce(activateDefaultLink, 100));
+}
+
+// Initialize when page is loaded
+window.addEventListener('load', initNavHighlighting);
+
+// Debug utility function to help diagnose any issues with highlighting
+function debugNavHighlight() {
+  // Get the currently active link
+  const activeLink = document.querySelector('.nav-link.active');
+  console.log('🔍 Active nav link:', activeLink ? activeLink.textContent : 'None');
+  
+  // Check all sections and their positions relative to viewport
+  const sections = Array.from(document.querySelectorAll('section[id]'));
+  console.log('📊 Section positions:');
+  
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    const topPercent = Math.round((rect.top / window.innerHeight) * 100);
+    const bottomPercent = Math.round((rect.bottom / window.innerHeight) * 100);
+    const inMiddle = rect.top < window.innerHeight/2 && rect.bottom > window.innerHeight/2;
+    
+    console.log(
+      `${section.id}: ${inMiddle ? '✅' : '❌'} ` +
+      `Top: ${topPercent}%, Bottom: ${bottomPercent}%, ` +
+      `Height: ${Math.round(rect.height)}px`
+    );
+  });
+  
+  // Visual marker of where we are on the page
+  console.log(`📍 Scroll position: ${window.scrollY}px`);
+}
+
+// Debug mode (enable as needed)
+// window.addEventListener('scroll', debounce(debugNavHighlight, 150));
